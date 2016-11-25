@@ -7,24 +7,39 @@ public class Main {
 
     public static void main(String[] args) {
         List<Player> players = new LinkedList<>();
-        players.add(new Computer());
-        players.add(new Computer());
-        players.add(new Human());
-        Dealer dealer = new Dealer();
+        players.add(new Computer("COMP1", new LimitIntellect(14)));
+        players.add(new Computer("COMP2", new LimitIntellect(20)));
+        players.add(new Human("HUMAN", new ConsoleIntellect()));
+        Dealer dealer = new Dealer("DEALER");
         players.add(dealer);
 
         for (Player player : players) {
             dealer.deal(player);
             dealer.deal(player);
-            System.out.println(player.hand);
+            System.out.println(player.name + " " + player.hand);
         }
         for (Player player : players) {
             while (true) {
+                System.out.println(player.name + " " + player.hand.getScore() + ":" + player.hand);
                 Command command = player.decision();
                 if (command == Command.STAND)
                     break;
                 if (command == Command.HIT)
                     dealer.deal(player);
+            }
+        }
+        for (Player player : players){
+            if (player!=dealer){
+                if (player.hand.getScore()>21)
+                    player.state = PlayerState.LOSS;
+                else if(dealer.hand.getScore()>21)
+                    player.state = PlayerState.WIN;
+                else if(dealer.hand.getScore()>player.hand.getScore())
+                    player.state = PlayerState.LOSS;
+                else if(dealer.hand.getScore()==player.hand.getScore())
+                    player.state = PlayerState.DRAW;
+                else player.state = PlayerState.WIN;
+                System.out.println(player.name+" "+player.state+" with "+player.hand);
             }
         }
     }
