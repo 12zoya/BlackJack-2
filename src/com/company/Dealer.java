@@ -6,8 +6,9 @@ package com.company;
 public class Dealer extends Computer {
     Deck deck = new Deck();
 
-    public Dealer(String name) {
-        super(name, new DealerIntellect());
+    public Dealer() {
+        super(new DealerIntellect());
+        name="DEALER";
     }
 
     public void deal(Player player) {
